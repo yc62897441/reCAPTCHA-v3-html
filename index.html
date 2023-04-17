@@ -7,6 +7,10 @@
         <title>reCAPTCHA v3</title>
     </head>
     <body>
+        <h1>reCAPTCHA v3 運作說明</h1>
+        <p>在按下 submit 按鈕時，g-recaptcha API 會先去向 g-recaptcha 進行驗證並取回 token，之後再進行應用程式後續的邏輯例如 post form data</p>
+        <p>注意：reCAPTCHA 權杖會在兩分鐘後失效。如果您要使用 reCAPTCHA 保護動作，請務必在使用者執行動作時呼叫 execute，而非在網頁載入時呼叫。</p>
+
         <form class="form" action="submit" method="post">
             <div>
                 <label for="account">帳號</label>
@@ -17,10 +21,12 @@
                 <input id="password" type="password" />
             </div>
 
+            <!-- reCAPTCHA_site_key 在向使用者顯示的 HTML 程式碼中使用這串網站金鑰。 -->
             <button class="g-recaptcha" data-sitekey="6LemvpIlAAAAAIR0sMNg7nrNOly2XpWsrlyLrjDB" data-callback="onSubmit" data-action="submit">Submit</button>
         </form>
 
-        <form class="test-form" action="submit" method="post" onsubmit="onSubmitTest">
+        <!-- 測試用元件 先隱藏 -->
+        <!-- <form class="test-form" action="submit" method="post" onsubmit="onSubmitTest">
             <div>
                 <label for="account2">帳號</label>
                 <input id="account2" type="text" />
@@ -30,7 +36,7 @@
                 <input id="password2" type="password" />
             </div>
             <button class="test-btn" type="button" onclick="onclick">test console</button>
-        </form>
+        </form> -->
 
         <script src="https://www.google.com/recaptcha/api.js"></script>
         <script>
@@ -44,6 +50,17 @@
                 const form = document.querySelector('.form')
                 console.log('form account', form[0].value)
                 console.log('form password', form[1].value)
+
+                const postData = {}
+                const account = testForm[0].value
+                const password = testForm[1].value
+                if (account && password) {
+                    postData.account = account
+                    postData.password = password
+                    postData.token = token
+                }
+
+                // 後續 axios post 動作
             }
 
             // const gRecaptchaBtn = document.querySelector('.g-recaptcha')
@@ -65,7 +82,7 @@
                     postData.password = password
                 }
 
-                // TODO: 後續 axios post 動作
+                // 後續 axios post 動作
             }
 
             // 建立要掛載到 .test-form 的 submit 事件
