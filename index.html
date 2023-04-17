@@ -7,27 +7,83 @@
         <title>reCAPTCHA v3</title>
     </head>
     <body>
-        <button class="g-recaptcha" data-sitekey="6LemvpIlAAAAAIR0sMNg7nrNOly2XpWsrlyLrjDB" data-callback="onSubmit" data-action="submit">Submit</button>
+        <form class="form" action="submit" method="post">
+            <div>
+                <label for="account">帳號</label>
+                <input id="account" type="text" />
+            </div>
+            <div>
+                <label for="password">密碼</label>
+                <input id="password" type="password" />
+            </div>
 
-        <button class="test-btn" onclick="onclick">test console</button>
+            <button class="g-recaptcha" data-sitekey="6LemvpIlAAAAAIR0sMNg7nrNOly2XpWsrlyLrjDB" data-callback="onSubmit" data-action="submit">Submit</button>
+        </form>
+
+        <form class="test-form" action="submit" method="post" onsubmit="onSubmitTest">
+            <div>
+                <label for="account2">帳號</label>
+                <input id="account2" type="text" />
+            </div>
+            <div>
+                <label for="password2">密碼</label>
+                <input id="password2" type="password" />
+            </div>
+            <button class="test-btn" type="button" onclick="onclick">test console</button>
+        </form>
 
         <script src="https://www.google.com/recaptcha/api.js"></script>
         <script>
+            // TODO: 正式元件
             function onSubmit(token) {
+                // 從 g-Recaptcha 取得亂碼 token
                 console.log('token', token)
+
+                // 進行向後端應用程式發送 post
                 // document.getElementById('demo-form').submit()
+                const form = document.querySelector('.form')
+                console.log('form account', form[0].value)
+                console.log('form password', form[1].value)
             }
 
-            function onClick() {
-                console.log('onclick')
-            }
-
-            const testBtn = document.querySelector('.test-btn')
-            testBtn.addEventListener('click', onClick)
-
-            const gRecaptchaBtn = document.querySelector('.g-recaptcha')
+            // const gRecaptchaBtn = document.querySelector('.g-recaptcha')
             // gRecaptchaBtn.addEventListener('click', onSubmit)
 
+            // TODO: 測試用元件
+            function onSubmitTest(event) {
+                event.preventDefault()
+
+                const testForm = document.querySelector('.test-form')
+                console.log('onSubmit event.target[0]', testForm[0].value)
+                console.log('onSubmit event.target[0]', testForm[1].value)
+
+                const postData = {}
+                const account = testForm[0].value
+                const password = testForm[1].value
+                if (account && password) {
+                    postData.account = account
+                    postData.password = password
+                }
+
+                // TODO: 後續 axios post 動作
+            }
+
+            // 建立要掛載到 .test-form 的 submit 事件
+            const testForm = document.querySelector('.test-form')
+            const event = document.createEvent('Event') // 建立事件
+            event.initEvent('submit', true, true) // 設定事件名稱為
+            testForm.addEventListener('submit', onSubmitTest, false) // 監聽事件
+
+            // 透過點擊 .test-btn 來接續觸發 .test-form 的 submit 事件
+            function onClickTest() {
+                console.log('onClick')
+
+                // 觸發 .test-form 的 submit 事件
+                const testForm = document.querySelector('.test-form')
+                testForm.dispatchEvent(event)
+            }
+            const testBtn = document.querySelector('.test-btn')
+            testBtn.addEventListener('click', onClickTest)
         </script>
     </body>
 </html>
