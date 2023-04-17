@@ -9,11 +9,25 @@
     <body>
         <button class="g-recaptcha" data-sitekey="6LemvpIlAAAAAIR0sMNg7nrNOly2XpWsrlyLrjDB" data-callback="onSubmit" data-action="submit">Submit</button>
 
+        <button class="test-btn" onclick="onclick">test console</button>
+
         <script src="https://www.google.com/recaptcha/api.js"></script>
         <script>
             function onSubmit(token) {
-                document.getElementById('demo-form').submit()
+                console.log('token', token)
+                // document.getElementById('demo-form').submit()
             }
+
+            function onClick() {
+                console.log('onclick')
+            }
+
+            const testBtn = document.querySelector('.test-btn')
+            testBtn.addEventListener('click', onClick)
+
+            const gRecaptchaBtn = document.querySelector('.g-recaptcha')
+            // gRecaptchaBtn.addEventListener('click', onSubmit)
+
         </script>
     </body>
 </html>
